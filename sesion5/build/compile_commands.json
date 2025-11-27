@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/sergio/Documentos/IG/sesion5/build",
+  "command": "/usr/bin/g++  -I/home/sergio/Documentos/IG/sesion5/src -g -std=gnu++14 -o CMakeFiles/sesion5.dir/src/Model.cpp.o -c /home/sergio/Documentos/IG/sesion5/src/Model.cpp",
+  "file": "/home/sergio/Documentos/IG/sesion5/src/Model.cpp",
+  "output": "CMakeFiles/sesion5.dir/src/Model.cpp.o"
+},
+{
+  "directory": "/home/sergio/Documentos/IG/sesion5/build",
+  "command": "/usr/bin/g++  -I/home/sergio/Documentos/IG/sesion5/src -g -std=gnu++14 -o CMakeFiles/sesion5.dir/src/Shaders.cpp.o -c /home/sergio/Documentos/IG/sesion5/src/Shaders.cpp",
+  "file": "/home/sergio/Documentos/IG/sesion5/src/Shaders.cpp",
+  "output": "CMakeFiles/sesion5.dir/src/Shaders.cpp.o"
+},
+{
+  "directory": "/home/sergio/Documentos/IG/sesion5/build",
+  "command": "/usr/bin/g++  -I/home/sergio/Documentos/IG/sesion5/src -g -std=gnu++14 -o CMakeFiles/sesion5.dir/src/main.cpp.o -c /home/sergio/Documentos/IG/sesion5/src/main.cpp",
+  "file": "/home/sergio/Documentos/IG/sesion5/src/main.cpp",
+  "output": "CMakeFiles/sesion5.dir/src/main.cpp.o"
+}
+]
