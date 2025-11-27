@@ -40,7 +40,7 @@ int main() {
 
  // Creamos la ventana
     GLFWwindow* window;
-    window = glfwCreateWindow(w, h, "Sesion 5", NULL, NULL);
+    window = glfwCreateWindow(w, h, "Proyecto", NULL, NULL);
     if(!window) {
         glfwTerminate();
         return -1;
