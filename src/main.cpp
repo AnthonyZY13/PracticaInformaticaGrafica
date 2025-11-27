@@ -86,7 +86,7 @@ void configScene() {
     shaders.initShaders("resources/shaders/vshader.glsl","resources/shaders/fshader.glsl");
 
  // Modelos
-   house.initModel("resources/models/casa.obj");
+    clown.initModel("resources/models/payaso.obj");
     //clown.initModel("resources/models/payaso.obj");
 
 }
@@ -113,7 +113,7 @@ void renderScene() {
     glm::vec3 up    (0.0, 1.0,  0.0);
     glm::mat4 V = glm::lookAt(eye, center, up);
 
-    //drawObject(house,glm::vec3{1,0,0},P,V,I);
+    drawObject(clown,glm::vec3{1,0,0},P,V,I);
     //drawObject(clown,glm::vec3{1,0,0},P,V,I);
  // Dibujamos la escena
     /*drawSuelo(P,V,I);
