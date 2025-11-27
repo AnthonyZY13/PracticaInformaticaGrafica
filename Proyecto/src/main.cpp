@@ -19,7 +19,7 @@ void funKey            (GLFWwindow* window, int key  , int scancode, int action,
 
 // Modelos
    Model plane;
-   Model cone;
+   Model triangle;
 
 // Viewport
    int w = 500;
@@ -28,16 +28,6 @@ void funKey            (GLFWwindow* window, int key  , int scancode, int action,
 // Animaciones
    float desZ = 0.0;
    float rotZ = 0.0;
-
-   //Apartado 2 SERGIO ANTON BERENGUER 
-   int numberAspas = 5;
-   //Apartado 3 SERGIO ANTON BERENGUER
-   double lastTime = 0.0;
-   //Apartado 4 SERGIO ANTON BERENGUER
-   bool autoRotate = true;
-   //Apartado 6 SERGIO ANTON BERENGUER
-   float heightOffset = 0.0f;
-
 
 int main() {
 
@@ -51,8 +41,6 @@ int main() {
  // Creamos la ventana
     GLFWwindow* window;
     window = glfwCreateWindow(w, h, "Sesion 5", NULL, NULL);
-    //Apartado 3 SERGIO ANTON BERENGUER   
-    lastTime = glfwGetTime();
     if(!window) {
         glfwTerminate();
         return -1;
@@ -99,7 +87,7 @@ void configScene() {
 
  // Modelos
     plane.initModel("resources/models/plane.obj");
-    cone.initModel("resources/models/cone.obj");
+    triangle.initModel("resources/models/triangle.obj");
 
 }
 
@@ -112,15 +100,6 @@ void renderScene() {
  // Indicamos los shaders a utilizar
     shaders.useShaders();
 
-    //Apartado 3 SERGIO ANTON BERENGUER
-      double currentTime = glfwGetTime();
-      double elapsed = currentTime - lastTime;
-
-      if (autoRotate && elapsed >= 0.01) {//Apartado 4 SERGIO ANTON BERENGUER 
-         rotZ += 3.6f;        
-         lastTime = currentTime;
-      }
-
  // Matriz P
     float fovy   = 60.0;
     float nplane =  0.1;
@@ -129,7 +108,7 @@ void renderScene() {
     glm::mat4 P = glm::perspective(glm::radians(fovy), aspect, nplane, fplane);
 
  // Matriz V
-    glm::vec3 eye   (0.0, 5.0, 10.0);
+    glm::vec3 eye   (0.0, 0.0, 10.0);
     glm::vec3 center(0.0, 0.0,  0.0);
     glm::vec3 up    (0.0, 1.0,  0.0);
     glm::mat4 V = glm::lookAt(eye, center, up);
@@ -137,25 +116,9 @@ void renderScene() {
  // Dibujamos la escena
     drawSuelo(P,V,I);
 
-    //Apartado 5 y 6 SERGIO ANTON BERENGUER   
-   glm::mat4 R  = glm::rotate(I, glm::radians(rotZ), glm::vec3(0, 0, 1));
-   glm::mat4 R2 = glm::rotate(I, glm::radians(-90.0f), glm::vec3(1,0,0));
-
-   float d = 2.5f;
-
-
-   glm::mat4 T1 = glm::translate(I, glm::vec3(-d, heightOffset,  d));
-   drawHelice(P, V, T1 * R2 * R);
-
-   glm::mat4 T2 = glm::translate(I, glm::vec3( d, heightOffset,  d));
-   drawHelice(P, V, T2 * R2 * R);
-
-   glm::mat4 T3 = glm::translate(I, glm::vec3(-d, heightOffset, -d));
-   drawHelice(P, V, T3 * R2 * R);
-
-   glm::mat4 T4 = glm::translate(I, glm::vec3( d, heightOffset, -d));
-   drawHelice(P, V, T4 * R2 * R);
-
+    glm::mat4 T = glm::translate(I, glm::vec3(0.0, 0.0, desZ));
+    glm::mat4 R = glm::rotate   (I, glm::radians(rotZ), glm::vec3(0, 0, 1));
+    drawHelice(P,V,R*T);
 
 }
 
@@ -168,41 +131,33 @@ void drawObject(Model &model, glm::vec3 color, glm::mat4 P, glm::mat4 V, glm::ma
         model.renderModel(GL_FILL);
     glDisable(GL_POLYGON_OFFSET_FILL);
 
-    // Color del alambre = 75% del color sólido
-    glm::vec3 wireColor = color * 0.75f;
-    shaders.setVec3("uColor",wireColor);
+    shaders.setVec3("uColor",glm::vec3(1.0, 1.0, 1.0));
     model.renderModel(GL_LINE);
 
 }
 
 void drawSuelo(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 
-
-    glm::mat4 S = glm::scale(I, glm::vec3(5.0, 5.0, 5.0));
+    glm::mat4 S = glm::scale(I, glm::vec3(5.0, 1.0, 5.0));
     drawObject(plane, glm::vec3(0.0, 0.0, 1.0), P, V, M*S);
 
 }
- 
-//Apartado 1 SERGIO ANTON BERENGUER
+
 void drawAspa(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 
-    glm::mat4 S = glm::scale(I, glm::vec3(0.25, 1, 0.05));
+    glm::mat4 T = glm::translate(I, glm::vec3(0.0, -1.0, 0.0));
+    drawObject(triangle, glm::vec3(1.0, 0.0, 0.0), P, V, M*T);
 
-    glm::mat4 T = glm::translate(I, glm::vec3(0.0, -1.0, 0.0)); 
-
-    drawObject(cone, glm::vec3(1.0, 0.0, 0.0), P, V, M * T * S);
 }
 
-//Apartado 1 y 2 SERGIO ANTON BERENGUER
 void drawHelice(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 
-    glm::mat4 Rz = glm::rotate(I, glm::radians(360.0f / numberAspas), glm::vec3(0, 0, 1));
-    glm::mat4 current = I;
+    glm::mat4 Rz90 = glm::rotate(I, glm::radians(90.0f), glm::vec3(0, 0, 1));
+    drawAspa(P,V,M);
+    drawAspa(P,V,M*Rz90);
+    drawAspa(P,V,M*Rz90*Rz90);
+    drawAspa(P,V,M*Rz90*Rz90*Rz90);
 
-    for(int i = 0; i < numberAspas; ++i) {
-        drawAspa(P, V, M * current);
-        current = current * Rz;  
-    }
 }
 
 void funFramebufferSize(GLFWwindow* window, int width, int height) {
@@ -219,70 +174,10 @@ void funFramebufferSize(GLFWwindow* window, int width, int height) {
 void funKey(GLFWwindow* window, int key  , int scancode, int action, int mods) {
 
     switch(key) {
-        //Apartado 6 SERGIO ANTON BERENGUER
-        case GLFW_KEY_UP:
-           if (action == GLFW_PRESS || action == GLFW_REPEAT)
-              heightOffset += 0.1f;
-        break;
-
-        case GLFW_KEY_DOWN:
-            if (action == GLFW_PRESS || action == GLFW_REPEAT)
-              heightOffset -= 0.1f;
-        break;
+        case GLFW_KEY_UP:    desZ -= 0.1; break;
+        case GLFW_KEY_DOWN:  desZ += 0.1; break;
         case GLFW_KEY_LEFT:  rotZ += 5.0; break;
         case GLFW_KEY_RIGHT: rotZ -= 5.0; break;
-        //Apartado 2 SERGIO ANTON BERENGUER
-        case GLFW_KEY_1:
-            if(action == GLFW_PRESS){
-               numberAspas = 1;
-            }
-        break;
-        case GLFW_KEY_2:
-            if(action == GLFW_PRESS){
-               numberAspas = 2;
-            }
-        break;
-        case GLFW_KEY_3:
-            if(action == GLFW_PRESS){
-               numberAspas = 3;
-            }
-        break;
-        case GLFW_KEY_4:
-            if(action == GLFW_PRESS){
-               numberAspas = 4;
-            }
-        break;
-        case GLFW_KEY_5:
-            if(action == GLFW_PRESS){
-               numberAspas = 5;
-            }
-        break;
-        case GLFW_KEY_6:
-            if(action == GLFW_PRESS){
-               numberAspas = 6;
-            }
-        break;
-        case GLFW_KEY_7:
-            if(action == GLFW_PRESS){
-               numberAspas = 7;
-            }
-        break;
-        case GLFW_KEY_8:
-            if(action == GLFW_PRESS){
-               numberAspas = 8;
-            }
-        break;
-        case GLFW_KEY_9:
-            if(action == GLFW_PRESS){
-               numberAspas = 9;
-            }
-        break;
-        //Apartado 4 SERGIO ANTON BERENGUER  
-        case GLFW_KEY_R:
-            if(action == GLFW_PRESS) {
-               autoRotate = !autoRotate; 
-            }
-        break;
         default:
             desZ = 0.0;
             rotZ = 0.0;
