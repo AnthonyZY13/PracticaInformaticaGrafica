@@ -1,4 +1,7 @@
 CMakeLists.txt
 build/
-binary/proyecto
+binary/proyecto*
+binary/*.dll
+libraries/
+
 
