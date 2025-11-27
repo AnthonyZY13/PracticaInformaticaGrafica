@@ -1,3 +1,0 @@
-/home/sergio/Documentos/IG/sesion5/build/CMakeFiles/sesion5.dir
-/home/sergio/Documentos/IG/sesion5/build/CMakeFiles/edit_cache.dir
-/home/sergio/Documentos/IG/sesion5/build/CMakeFiles/rebuild_cache.dir

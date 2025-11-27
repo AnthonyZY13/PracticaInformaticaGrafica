@@ -1,1 +1,0 @@
-/usr/bin/g++ -g CMakeFiles/sesion5.dir/src/Model.cpp.o CMakeFiles/sesion5.dir/src/Shaders.cpp.o CMakeFiles/sesion5.dir/src/main.cpp.o -o /home/sergio/Documentos/IG/sesion5/binary/sesion5  -lGL -lGLEW -lglfw -lassimp -lfreeimage 
